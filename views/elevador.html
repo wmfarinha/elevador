@@ -1,0 +1,36 @@
+<div ng-controller="ElevadorCtrl as vm">
+    
+    <h3>Status Elevador: {{vm.statusElevador}} / Andar {{vm.andarElevador}}</h3>
+
+    <form class="form-inline">
+        <div class="form-group">
+            <div class="col-md-5">
+                <label>Qtd Passageiros</label>
+                <input type="text" class="form-control" name="qtdPassageiros" ng-model="vm.qtdPassageiros" placeholder="Quantidade Passageiros">                
+            </div>            
+        </div>
+        <div class="form-group">
+            <div class="col-md-3">
+                <button class="btn btn-success" ng-click="vm.adicionaQtdPassageiros()">add</button>
+            </div>
+        </div>
+    </form>   
+    <div class="form-class">
+        <div class="col-md-3" ng-repeat="passageiro in vm.passageiros">
+            <label>Passageiro: {{passageiro.passageiro}}</label>
+            <input type="text" class="form-control" ng-model="passageiro.andar" placeholder="Andar">                
+        </div>
+        <br />
+    </div>
+
+    <br />
+
+    <div class="form-class">
+        <div class="col-md-12">
+            <button class="btn btn-primary">Iniciar Rota</button>
+        </div>
+    </div>
+    
+     
+
+</div>

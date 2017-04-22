@@ -1,0 +1,22 @@
+{
+  "name": "Elevador",
+  "homepage": "https://github.com/wmfarinha/elevador",
+  "authors": [
+    "William Faria <wmfarinha@gmail.com>"
+  ],
+  "description": "teste do elevador",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-route": "^1.6.4",
+    "bootstrap": "^3.3.7"
+  }
+}
