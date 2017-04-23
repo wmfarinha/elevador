@@ -1,6 +1,6 @@
 <div ng-controller="ElevadorCtrl as vm">
     
-    <h3>Status Elevador: {{vm.statusElevador}} / Andar {{vm.andarElevador}}</h3>
+    <h3>Status Elevador: {{vm.statusElevador}} | Andar {{vm.andarElevador}}</h3>
 
     <form class="form-inline">
         <div class="form-group">
@@ -17,7 +17,7 @@
     </form>   
     <div class="form-class">
         <div class="col-md-3" ng-repeat="passageiro in vm.passageiros">
-            <label>Passageiro: {{passageiro.passageiro}}</label>
+            <label>Passageiro {{passageiro.passageiro}} informe o andar</label>
             <input type="text" class="form-control" ng-model="passageiro.andar" placeholder="Andar">                
         </div>
         <br />
@@ -27,10 +27,9 @@
 
     <div class="form-class">
         <div class="col-md-12">
-            <button class="btn btn-primary">Iniciar Rota</button>
+            <button class="btn btn-primary" ng-click="vm.fecharPorta()">Fechar Porta</button>
         </div>
-    </div>
-    
+    </div>  
      
 
 </div>
