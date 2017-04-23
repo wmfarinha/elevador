@@ -10,6 +10,7 @@ function ElevadorCtrl($scope, $filter) {
     vm.qtdPassageiros = 0;
     vm.statusElevador = "Porta Aberta";
     vm.andarElevador = 0;
+    vm.ultimoAndar = 0;
 
     function adicionaPassageiro(passageiro) {
         vm.passageiros.push({
@@ -19,7 +20,7 @@ function ElevadorCtrl($scope, $filter) {
     }
 
     vm.adicionaQtdPassageiros = function () {
-        for (let i = 0; i < vm.qtdPassageiros; i++) {
+        for (let i = 1; i <= vm.qtdPassageiros; i++) {
             adicionaPassageiro(i);
         };
     }
@@ -28,13 +29,19 @@ function ElevadorCtrl($scope, $filter) {
 
         console.log('Fecha Porta')
 
-        for (let i = 1; i <= vm.qtdAndar; i++) {
+        var array_andar = [];
+        for (let k = 0; k < vm.qtdPassageiros; k++) {
+            array_andar.push(parseInt(vm.passageiros[k].andar));
+        }
+
+        vm.ultimoAndar = Math.max.apply(null, array_andar);
+
+        for (let i = 1; i <= vm.ultimoAndar; i++) {
 
             vm.andarElevador = i;
 
             console.log('Vai para Andar -> ' + vm.andarElevador);
 
-            //verfica que se tem passageiros para descer
             let passageiroDesce = $filter('filter')(vm.passageiros, {
                 andar: vm.andarElevador
             });
@@ -49,8 +56,6 @@ function ElevadorCtrl($scope, $filter) {
 
                 console.log('Fecha porta');
 
-            } else {
-                console.log('Não tem passageiros para descer no andar ' + vm.andarElevador);
             }
         }
     }
