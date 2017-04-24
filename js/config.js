@@ -2,7 +2,7 @@ function config($routeProvider) {
     $routeProvider
         .when("/", {
             templateUrl: "views/elevador.html",
-            controller: "ElevadorCtrl"
+            controller: "ElevadorController"
         });
 }
 
