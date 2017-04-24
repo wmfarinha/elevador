@@ -8,9 +8,12 @@ function ElevadorCtrl($scope, $filter) {
     vm.qtdAndar = 6;
     vm.passageiros = [];
     vm.qtdPassageiros = 0;
-    vm.statusElevador = "Porta Aberta";
+    vm.qtdMaxPassageiros = 6;
     vm.andarElevador = 0;
     vm.ultimoAndar = 0;
+    vm.elevador_sobe = [];
+    vm.elevador_desce = [];
+    vm.output = document.getElementById("output");
 
     function adicionaPassageiro(passageiro) {
         vm.passageiros.push({
@@ -20,54 +23,97 @@ function ElevadorCtrl($scope, $filter) {
     }
 
     vm.adicionaQtdPassageiros = function () {
-        for (let i = 1; i <= vm.qtdPassageiros; i++) {
-            adicionaPassageiro(i);
-        };
+        vm.passageiros = [];
+
+        if (vm.qtdPassageiros <= vm.qtdMaxPassageiros) {
+            for (let i = 1; i <= vm.qtdPassageiros; i++) {
+                adicionaPassageiro(i);
+            };
+        } else {
+            alert('Quantidade de passageiros ultrapassou o limite máximo de ' + vm.qtdMaxPassageiros + ' passageiros');
+        }
+    }
+
+    function orginizaAndares() {
+        var array_andar = [];
+
+        for (let k = 0; k < vm.passageiros.length; k++) {
+
+            if (parseInt(vm.passageiros[k].andar) > vm.andarElevador) {
+                vm.elevador_sobe.push(parseInt(vm.passageiros[k].andar));
+            } else if (parseInt(vm.passageiros[k].andar) < vm.andarElevador) {
+                vm.elevador_desce.push(vm.passageiros[k].andar);
+            }
+        }
+
+        array_andar.push(vm.elevador_sobe);
+        array_andar.push(vm.elevador_desce);
+
+        vm.elevador_sobe = [];
+        vm.elevador_desce = [];
+
+        return array_andar;
     }
 
     function sobe() {
+        vm.array_andares = orginizaAndares()[0];
 
-        console.log('Fecha Porta')
+        vm.ultimoAndar = Math.max.apply(null, vm.array_andares);
 
-        var array_andar = [];
-        for (let k = 0; k < vm.qtdPassageiros; k++) {
-            array_andar.push(parseInt(vm.passageiros[k].andar));
-        }
+        if ((vm.andarElevador + 1) <= vm.ultimoAndar) {
+            vm.output.innerHTML += "Fecha porta <br />";
+            vm.output.innerHTML += "Subindo... <br />";
 
-        vm.ultimoAndar = Math.max.apply(null, array_andar);
-
-        for (let i = 1; i <= vm.ultimoAndar; i++) {
-
-            vm.andarElevador = i;
-
-            console.log('Vai para Andar -> ' + vm.andarElevador);
-
-            let passageiroDesce = $filter('filter')(vm.passageiros, {
-                andar: vm.andarElevador
-            });
-
-            if (passageiroDesce != null && passageiroDesce.length > 0) {
-                console.log('Abre a porta');
-
-                for (let j = 0; j < passageiroDesce.length; j++) {
-                    vm.passageiros.splice(vm.passageiros.indexOf(passageiroDesce[j]), 1);
-                    console.log('Sai passageiro -> ' + passageiroDesce[j].passageiro);
-                }
-
-                console.log('Fecha porta');
-
+            for (let i = (vm.andarElevador + 1); i <= vm.ultimoAndar; i++) {
+                rotaElevador(i);
             }
         }
     }
 
     function desce() {
-        for (let i = vm.qtdAndar; i <= vm.qtdAndar; i--) {
+        vm.array_andares = orginizaAndares()[1];
+        vm.ultimoAndar = Math.min.apply(null, vm.array_andares);
 
+        if ((vm.andarElevador - 1) >= vm.ultimoAndar) {
+            vm.output.innerHTML += "Fecha porta <br />";
+            vm.output.innerHTML += "Descendo... <br />";
+            for (let i = (vm.andarElevador - 1); i >= vm.ultimoAndar; i--) {
+                rotaElevador(i);
+            }
         }
     }
 
     vm.fecharPorta = function () {
+        vm.output.innerHTML = "";
+        vm.output.innerHTML += "Elevador no andar " + vm.andarElevador + "<br />";
+
         sobe();
+        desce();
+
+    }
+
+    function rotaElevador(nroAndar) {
+        vm.andarElevador = nroAndar;
+        vm.output.innerHTML += "Vai para Andar [ " + vm.andarElevador + " ]<br />";
+
+        let passageiroSai = $filter('filter')(vm.passageiros, {
+            andar: vm.andarElevador
+        });
+
+        if (passageiroSai != null && passageiroSai.length > 0) {
+            vm.output.innerHTML += "Abre a porta <br />";
+
+            for (let j = 0; j < passageiroSai.length; j++) {
+                vm.passageiros.splice(vm.passageiros.indexOf(passageiroSai[j]), 1);
+                vm.output.innerHTML += "Sai passageiro ->" + passageiroSai[j].passageiro + "<br />";
+            }
+
+            if (nroAndar == vm.ultimoAndar) {
+                vm.output.innerHTML += "Porta esta aberta <br />";
+            } else {
+                vm.output.innerHTML += "Porta esta fechada <br />";
+            }
+        }
     }
 }
 
